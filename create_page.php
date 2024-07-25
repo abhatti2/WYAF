@@ -29,6 +29,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "Invalid input. Please fill in all fields correctly.";
     }
 }
+
+// Fetch categories from the database
+$stmt = $pdo->query("SELECT id, name FROM categories");
+$categories = $stmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -47,14 +51,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <textarea id="content" name="content" required></textarea><br><br>
 
         <label for="category">Category:</label>
-        <select id="category" name="category_id">
-            <?php
-            // Fetch categories from the database
-            $stmt = $pdo->query("SELECT id, name FROM categories");
-            while ($row = $stmt->fetch()) {
-                echo "<option value='{$row['id']}'>{$row['name']}</option>";
-            }
-            ?>
+        <select id="category" name="category_id" required>
+            <option value="">Select a category</option>
+            <?php foreach ($categories as $category): ?>
+                <option value="<?php echo $category['id']; ?>"><?php echo htmlspecialchars($category['name']); ?></option>
+            <?php endforeach; ?>
         </select><br><br>
 
         <button type="submit">Create Page</button>
