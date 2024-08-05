@@ -1,5 +1,4 @@
 <?php
-// Start the session and include the database configuration file
 session_start();
 include 'config.php';
 
@@ -28,13 +27,23 @@ if ($page_id) {
     $image = $stmt->fetch();
 
     // Handle comment submission
-    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['user_id'])) {
-        $comment = filter_input(INPUT_POST, 'comment', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $user_id = $_SESSION['user_id'];
+    $error = '';
+    $comment_text = '';
 
-        if ($comment) {
-            $stmt = $pdo->prepare("INSERT INTO comments (page_id, user_id, comment, created_at) VALUES (?, ?, ?, NOW())");
-            $stmt->execute([$page_id, $user_id, $comment]);
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['user_id'])) {
+        $comment_text = filter_input(INPUT_POST, 'comment', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $captcha = filter_input(INPUT_POST, 'captcha', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+        if ($captcha !== $_SESSION['captcha']) {
+            $error = 'Incorrect CAPTCHA. Please try again.';
+        } else {
+            $user_id = $_SESSION['user_id'];
+
+            if ($comment_text) {
+                $stmt = $pdo->prepare("INSERT INTO comments (page_id, user_id, comment, created_at) VALUES (?, ?, ?, NOW())");
+                $stmt->execute([$page_id, $user_id, $comment_text]);
+                $comment_text = ''; // Reset the comment text
+            }
         }
     }
 
@@ -63,10 +72,18 @@ if ($page_id) {
     <?php endif; ?>
 
     <h2>Comments</h2>
+    <?php if ($error): ?>
+        <p style="color:red;"><?php echo $error; ?></p>
+    <?php endif; ?>
     <?php if (isset($_SESSION['user_id'])): ?>
         <form method="POST" action="view_page.php?id=<?php echo $page_id; ?>">
             <label for="comment">Add a comment:</label><br>
-            <textarea id="comment" name="comment" required></textarea><br><br>
+            <textarea id="comment" name="comment" required><?php echo htmlspecialchars($comment_text); ?></textarea><br><br>
+
+            <label for="captcha">Enter the CAPTCHA:</label><br>
+            <img src="captcha.php" alt="CAPTCHA"><br><br>
+            <input type="text" id="captcha" name="captcha" required><br><br>
+
             <button type="submit">Submit Comment</button>
         </form>
     <?php else: ?>
