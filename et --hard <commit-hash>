@@ -1,0 +1,59 @@
+[33mcommit be7d03c131b8539cb52553d3381314d5a8a33215[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author: Ashbeel Bhatti <abhatti2@rrc.ca>
+Date:   Sun Aug 4 23:37:07 2024 -0500
+
+    add auth.php
+
+[33mcommit 537a0b54baeacde990e3cac572490a4b9df5f1d9[m
+Author: Ashbeel Bhatti <abhatti2@rrc.ca>
+Date:   Sun Aug 4 22:25:20 2024 -0500
+
+    update view_page.php string santize
+
+[33mcommit 82087a8b0abd64c223c399deb818cbe36ced6c86[m
+Author: Ashbeel Bhatti <abhatti2@rrc.ca>
+Date:   Sun Aug 4 22:17:35 2024 -0500
+
+    add image resize feature
+
+[33mcommit 2bafc97b1173fa3e5d29a7b3b23f4e4e7ec8d4e6[m
+Author: Ashbeel Bhatti <abhatti2@rrc.ca>
+Date:   Sun Aug 4 21:58:24 2024 -0500
+
+    add delete image function
+
+[33mcommit 5f1c8bbbff71cfb1dadf0893195f3303759909f9[m
+Author: Ashbeel Bhatti <abhatti2@rrc.ca>
+Date:   Sun Aug 4 21:54:28 2024 -0500
+
+    add image
+
+[33mcommit 2ce01741e2fa1d67281f1330ce02f1521618a3e4[m
+Author: Ashbeel Bhatti <abhatti2@rrc.ca>
+Date:   Thu Jul 25 11:37:16 2024 -0500
+
+    add page comments
+
+[33mcommit 19aafab6036ac7cd6ad8c0b25e44466f18d12821[m
+Author: Ashbeel Bhatti <abhatti2@rrc.ca>
+Date:   Thu Jul 25 11:23:35 2024 -0500
+
+    add category sorting
+
+[33mcommit a330557513e554673786a21a66992834d85ab2f1[m
+Author: Ashbeel Bhatti <abhatti2@rrc.ca>
+Date:   Thu Jul 25 10:56:27 2024 -0500
+
+    add category creation feature
+
+[33mcommit c6e9132e17d4cbe438941b5ddc2e407f9d8496f0[m
+Author: Ashbeel Bhatti <abhatti2@rrc.ca>
+Date:   Fri Jul 19 18:05:44 2024 -0500
+
+    add "hash_password.php"
+
+[33mcommit 2d044cae6a170e13db6a41fe43f7270c0451227b[m
+Author: Ashbeel Bhatti <abhatti2@rrc.ca>
+Date:   Fri Jul 19 03:13:57 2024 -0500
+
+    add files
