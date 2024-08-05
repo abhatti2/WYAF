@@ -3,6 +3,11 @@
 session_start();
 include 'config.php';
 
+// Enable error reporting for debugging
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
@@ -22,6 +27,11 @@ if ($page_id) {
         echo "Page not found.";
         exit;
     }
+
+    // Fetch the associated images
+    $stmt = $pdo->prepare("SELECT * FROM images WHERE page_id = ?");
+    $stmt->execute([$page_id]);
+    $images = $stmt->fetchAll();
 
     // Handle comment submission
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['user_id'])) {
@@ -53,6 +63,13 @@ if ($page_id) {
 <body>
     <h1><?php echo htmlspecialchars($page['title']); ?></h1>
     <p><?php echo nl2br(htmlspecialchars($page['content'])); ?></p>
+
+    <?php if ($images): ?>
+        <h2>Images</h2>
+        <?php foreach ($images as $image): ?>
+            <img src="<?php echo htmlspecialchars($image['filepath']); ?>" alt="<?php echo htmlspecialchars($image['filename']); ?>" style="max-width: 100%; height: auto;">
+        <?php endforeach; ?>
+    <?php endif; ?>
 
     <h2>Comments</h2>
     <?php if (isset($_SESSION['user_id'])): ?>

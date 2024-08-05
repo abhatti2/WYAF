@@ -3,6 +3,11 @@
 session_start();
 include 'config.php';
 
+// Enable error reporting for debugging
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // Check if the user is logged in and has an admin role
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
     header("Location: login.php");
@@ -17,14 +22,49 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $category_id = filter_input(INPUT_POST, 'category_id', FILTER_VALIDATE_INT);
     $user_id = $_SESSION['user_id'];
 
+    // Handle image upload
+    $image_filename = null;
+    $image_filepath = null;
+
+    if ($_FILES['image']['error'] == UPLOAD_ERR_OK) {
+        $image_tmp_path = $_FILES['image']['tmp_name'];
+        $image_filename = basename($_FILES['image']['name']);
+        $image_filepath = 'uploads/' . $image_filename;
+
+        // Check if the uploaded file is an image
+        $image_info = getimagesize($image_tmp_path);
+        if ($image_info === FALSE) {
+            echo "Uploaded file is not a valid image.";
+            exit;
+        }
+
+        // Move the uploaded file to the designated directory
+        if (!move_uploaded_file($image_tmp_path, $image_filepath)) {
+            echo "Failed to move uploaded file.";
+            exit;
+        }
+    }
+
     if ($title && $content && $category_id) {
         // Prepare and execute the SQL statement to insert the new page into the database
-        $stmt = $pdo->prepare("INSERT INTO pages (title, content, category_id, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW())");
-        $stmt->execute([$title, $content, $category_id]);
+        $pdo->beginTransaction();
+        try {
+            $stmt = $pdo->prepare("INSERT INTO pages (title, content, category_id, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW())");
+            $stmt->execute([$title, $content, $category_id]);
+            $page_id = $pdo->lastInsertId();
 
-        // Redirect to the admin page after successful insertion
-        header("Location: admin.php");
-        exit;
+            if ($image_filename && $image_filepath) {
+                $stmt = $pdo->prepare("INSERT INTO images (page_id, filename, filepath, created_at) VALUES (?, ?, ?, NOW())");
+                $stmt->execute([$page_id, $image_filename, $image_filepath]);
+            }
+
+            $pdo->commit();
+            header("Location: admin.php");
+            exit;
+        } catch (Exception $e) {
+            $pdo->rollBack();
+            echo "Failed to create page: " . $e->getMessage();
+        }
     } else {
         echo "Invalid input. Please fill in all fields correctly.";
     }
@@ -43,7 +83,7 @@ $categories = $stmt->fetchAll();
 </head>
 <body>
     <h1>Create New Page</h1>
-    <form method="POST" action="create_page.php">
+    <form method="POST" action="create_page.php" enctype="multipart/form-data">
         <label for="title">Title:</label>
         <input type="text" id="title" name="title" required><br><br>
 
@@ -57,6 +97,9 @@ $categories = $stmt->fetchAll();
                 <option value="<?php echo $category['id']; ?>"><?php echo htmlspecialchars($category['name']); ?></option>
             <?php endforeach; ?>
         </select><br><br>
+
+        <label for="image">Image (optional):</label>
+        <input type="file" id="image" name="image" accept="image/*"><br><br>
 
         <button type="submit">Create Page</button>
     </form>
