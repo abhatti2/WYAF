@@ -12,24 +12,44 @@ $keyword = '';
 $category_id = '';
 $results = [];
 $error = '';
+$results_per_page = 5; // Default number of results per page, change this value for testing
+$page = 1; // Default to the first page
+
+if (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) {
+    $page = (int) $_GET['page'];
+}
 
 if (isset($_GET['keyword']) && !empty(trim($_GET['keyword']))) {
     $keyword = filter_input(INPUT_GET, 'keyword', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $keyword = '%' . $keyword . '%';
 
+    $query = "SELECT * FROM pages WHERE (title LIKE ? OR content LIKE ?)";
+    $params = [$keyword, $keyword];
+
     if (isset($_GET['category_id']) && !empty($_GET['category_id'])) {
         $category_id = filter_input(INPUT_GET, 'category_id', FILTER_VALIDATE_INT);
-
-        // Search for pages in the specified category
-        $stmt = $pdo->prepare("SELECT * FROM pages WHERE (title LIKE ? OR content LIKE ?) AND category_id = ?");
-        $stmt->execute([$keyword, $keyword, $category_id]);
-    } else {
-        // Search for pages in all categories
-        $stmt = $pdo->prepare("SELECT * FROM pages WHERE title LIKE ? OR content LIKE ?");
-        $stmt->execute([$keyword, $keyword]);
+        $query .= " AND category_id = ?";
+        $params[] = $category_id;
     }
 
+    // Get the total number of results
+    $stmt = $pdo->prepare($query);
+    $stmt->execute($params);
+    $total_results = $stmt->rowCount();
+
+    // Calculate the starting row for the results
+    $start = ($page - 1) * $results_per_page;
+
+    // Add LIMIT clause to the SQL query
+    $query .= " LIMIT $start, $results_per_page";
+
+    // Execute the query with the LIMIT clause
+    $stmt = $pdo->prepare($query);
+    $stmt->execute($params);
     $results = $stmt->fetchAll();
+
+    // Calculate total pages
+    $total_pages = ceil($total_results / $results_per_page);
 } else {
     $error = 'Please enter a search keyword.';
 }
@@ -54,6 +74,21 @@ if (isset($_GET['keyword']) && !empty(trim($_GET['keyword']))) {
                 </li>
             <?php endforeach; ?>
         </ul>
+
+        <!-- Pagination Links -->
+        <div class="pagination">
+            <?php if ($total_pages > 1): ?>
+                <?php if ($page > 1): ?>
+                    <a href="?keyword=<?php echo urlencode($_GET['keyword']); ?>&category_id=<?php echo $category_id; ?>&page=<?php echo $page - 1; ?>">Previous</a>
+                <?php endif; ?>
+                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                    <a href="?keyword=<?php echo urlencode($_GET['keyword']); ?>&category_id=<?php echo $category_id; ?>&page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                <?php endfor; ?>
+                <?php if ($page < $total_pages): ?>
+                    <a href="?keyword=<?php echo urlencode($_GET['keyword']); ?>&category_id=<?php echo $category_id; ?>&page=<?php echo $page + 1; ?>">Next</a>
+                <?php endif; ?>
+            <?php endif; ?>
+        </div>
     <?php else: ?>
         <?php if (!$error): ?>
             <p>No results found for '<?php echo htmlspecialchars($_GET['keyword']); ?>'.</p>
