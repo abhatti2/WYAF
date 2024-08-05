@@ -8,12 +8,6 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Check if the user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit;
-}
-
 // Get the page ID from the URL
 $page_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
@@ -28,14 +22,14 @@ if ($page_id) {
         exit;
     }
 
-    // Fetch the associated images
+    // Fetch the associated image
     $stmt = $pdo->prepare("SELECT * FROM images WHERE page_id = ?");
     $stmt->execute([$page_id]);
-    $images = $stmt->fetchAll();
+    $image = $stmt->fetch();
 
     // Handle comment submission
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['user_id'])) {
-        $comment = filter_input(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
+        $comment = filter_input(INPUT_POST, 'comment', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $user_id = $_SESSION['user_id'];
 
         if ($comment) {
@@ -64,11 +58,8 @@ if ($page_id) {
     <h1><?php echo htmlspecialchars($page['title']); ?></h1>
     <p><?php echo nl2br(htmlspecialchars($page['content'])); ?></p>
 
-    <?php if ($images): ?>
-        <h2>Images</h2>
-        <?php foreach ($images as $image): ?>
-            <img src="<?php echo htmlspecialchars($image['filepath']); ?>" alt="<?php echo htmlspecialchars($image['filename']); ?>" style="max-width: 100%; height: auto;">
-        <?php endforeach; ?>
+    <?php if ($image): ?>
+        <img src="<?php echo htmlspecialchars($image['filepath']); ?>" alt="<?php echo htmlspecialchars($image['filename']); ?>" style="max-width: 100%; height: auto;">
     <?php endif; ?>
 
     <h2>Comments</h2>
