@@ -2,6 +2,7 @@
 // Start the session and include the database configuration file
 session_start();
 include 'config.php';
+include 'header.php';
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {

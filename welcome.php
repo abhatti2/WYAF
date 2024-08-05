@@ -1,5 +1,6 @@
 <?php
 session_start();
+include 'header.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {

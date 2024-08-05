@@ -1,6 +1,7 @@
 <?php
 session_start();
 include 'config.php';
+include 'header.php'; // Include the header file
 
 // Enable error reporting for debugging
 ini_set('display_errors', 1);
