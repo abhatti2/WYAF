@@ -31,6 +31,11 @@ if (!$page) {
     exit;
 }
 
+// Fetch the associated image
+$stmt = $pdo->prepare("SELECT * FROM images WHERE page_id = ?");
+$stmt->execute([$page_id]);
+$image = $stmt->fetch();
+
 // Handle the form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Validate and sanitize input
@@ -61,6 +66,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
+    // Handle image deletion
+    $delete_image = isset($_POST['delete_image']) ? true : false;
+
     if ($title && $content && $category_id) {
         // Prepare and execute the SQL statement to update the page in the database
         $pdo->beginTransaction();
@@ -68,9 +76,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt = $pdo->prepare("UPDATE pages SET title = ?, content = ?, category_id = ?, updated_at = NOW() WHERE id = ?");
             $stmt->execute([$title, $content, $category_id, $page_id]);
 
+            // If a new image is uploaded, insert it into the database
             if ($image_filename && $image_filepath) {
+                // If there's an existing image, delete it
+                if ($image) {
+                    unlink($image['filepath']);
+                    $stmt = $pdo->prepare("DELETE FROM images WHERE id = ?");
+                    $stmt->execute([$image['id']]);
+                }
+
                 $stmt = $pdo->prepare("INSERT INTO images (page_id, filename, filepath, created_at) VALUES (?, ?, ?, NOW())");
                 $stmt->execute([$page_id, $image_filename, $image_filepath]);
+            }
+
+            // If delete image checkbox is checked, remove the image from the database and file system
+            if ($delete_image && $image) {
+                unlink($image['filepath']);
+                $stmt = $pdo->prepare("DELETE FROM images WHERE id = ?");
+                $stmt->execute([$image['id']]);
             }
 
             $pdo->commit();
@@ -113,7 +136,14 @@ $categories = $stmt->fetchAll();
             <?php endforeach; ?>
         </select><br><br>
 
-        <label for="image">Image (optional):</label>
+        <?php if ($image): ?>
+            <label>Current Image:</label><br>
+            <img src="<?php echo htmlspecialchars($image['filepath']); ?>" alt="<?php echo htmlspecialchars($image['filename']); ?>" style="max-width: 100%; height: auto;"><br>
+            <label for="delete_image">Delete this image</label>
+            <input type="checkbox" id="delete_image" name="delete_image"><br><br>
+        <?php endif; ?>
+
+        <label for="image">Upload New Image (optional):</label>
         <input type="file" id="image" name="image" accept="image/*"><br><br>
 
         <button type="submit">Update Page</button>
