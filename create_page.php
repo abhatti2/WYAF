@@ -8,6 +8,60 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// Function to resize image
+function resizeImage($sourcePath, $destPath, $maxWidth, $maxHeight) {
+    list($width, $height, $type) = getimagesize($sourcePath);
+
+    if ($width <= $maxWidth && $height <= $maxHeight) {
+        // No resizing needed, just copy the image
+        return copy($sourcePath, $destPath);
+    }
+
+    $ratio = $width / $height;
+
+    if ($width > $height) {
+        $newWidth = $maxWidth;
+        $newHeight = $maxWidth / $ratio;
+    } else {
+        $newHeight = $maxHeight;
+        $newWidth = $maxHeight * $ratio;
+    }
+
+    switch ($type) {
+        case IMAGETYPE_JPEG:
+            $source = imagecreatefromjpeg($sourcePath);
+            break;
+        case IMAGETYPE_PNG:
+            $source = imagecreatefrompng($sourcePath);
+            break;
+        case IMAGETYPE_GIF:
+            $source = imagecreatefromgif($sourcePath);
+            break;
+        default:
+            return false;
+    }
+
+    $newImage = imagecreatetruecolor($newWidth, $newHeight);
+    imagecopyresampled($newImage, $source, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+
+    switch ($type) {
+        case IMAGETYPE_JPEG:
+            imagejpeg($newImage, $destPath, 90); // 90 is the quality
+            break;
+        case IMAGETYPE_PNG:
+            imagepng($newImage, $destPath);
+            break;
+        case IMAGETYPE_GIF:
+            imagegif($newImage, $destPath);
+            break;
+    }
+
+    imagedestroy($source);
+    imagedestroy($newImage);
+
+    return true;
+}
+
 // Check if the user is logged in and has an admin role
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
     header("Location: login.php");
@@ -38,8 +92,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit;
         }
 
-        // Move the uploaded file to the designated directory
-        if (!move_uploaded_file($image_tmp_path, $image_filepath)) {
+        // Resize the image
+        $resized_image_path = 'uploads/resized_' . $image_filename;
+        if (!resizeImage($image_tmp_path, $resized_image_path, 800, 800)) {
+            echo "Failed to resize image.";
+            exit;
+        }
+
+        // Move the resized image to the designated directory
+        if (!rename($resized_image_path, $image_filepath)) {
             echo "Failed to move uploaded file.";
             exit;
         }
