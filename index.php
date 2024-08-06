@@ -14,7 +14,6 @@ session_start();
     <div class="container-fluid hero">
         <div class="hero-overlay text-center">
             <h1 class="display-4">Welcome to the Winnipeg Youth Arts Foundation (WYAF) Website</h1>
-            <p class="lead">Empowering youth through arts.</p>
             <?php if (!isset($_SESSION['user_id'])): ?>
                 <a href="login.php" class="btn btn-lg btn-custom">Login</a>
             <?php endif; ?>
