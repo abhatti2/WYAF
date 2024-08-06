@@ -1,5 +1,6 @@
 <?php
 session_start();
+include 'header.php';
 ?>
 
 <!DOCTYPE html>
@@ -12,44 +13,7 @@ session_start();
 </head>
 <body class="bg-light text-dark">
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-custom">
-        <div class="container">
-            <a class="navbar-brand" href="index.php">
-                <img src="images/painting_505910.png" alt="WYAF Logo" style="height: 40px;">
-                WYAF
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link nav-link-custom" href="list_categories.php">List of Categories</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link nav-link-custom" href="list_pages.php">List of Pages</a>
-                    </li>
-                    <?php if (isset($_SESSION['user_id']) && $_SESSION['role'] == 'admin'): ?>
-                        <li class="nav-item">
-                            <a class="nav-link nav-link-custom" href="manage_categories.php">Manage Categories</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link nav-link-custom" href="admin.php">Admin Page</a>
-                        </li>
-                    <?php endif; ?>
-                    <?php if (isset($_SESSION['user_id'])): ?>
-                        <li class="nav-item">
-                            <a class="nav-link nav-link-custom" href="logout.php">Logout</a>
-                        </li>
-                    <?php else: ?>
-                        <li class="nav-item">
-                            <a class="nav-link nav-link-custom" href="login.php">Login</a>
-                        </li>
-                    <?php endif; ?>
-                </ul>
-            </div>
-        </div>
-    </nav>
+
 
     <!-- Hero Section -->
     <header class="hero text-white text-center py-5 mb-4">
@@ -124,6 +88,8 @@ session_start();
         </div>
     </div>
 
+    <?php include 'footer.php'; ?>
+    
     <script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
     <script src="node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
     <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>

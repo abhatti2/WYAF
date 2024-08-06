@@ -53,48 +53,47 @@ if (isset($_GET['keyword']) && !empty(trim($_GET['keyword']))) {
 <head>
     <meta charset="UTF-8">
     <title>Search Results</title>
-    <style>
-        .pagination {
-            margin: 20px 0;
-        }
-        .pagination a {
-            margin: 0 5px;
-            text-decoration: none;
-        }
-    </style>
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap CSS -->
+    <link href="styles.css" rel="stylesheet"> <!-- External CSS -->
 </head>
-<body>
-    <h1>Search Results</h1>
-    <?php if ($error): ?>
-        <p style="color:red;"><?php echo $error; ?></p>
-    <?php endif; ?>
-    <?php if ($results): ?>
-        <ul>
-            <?php foreach ($results as $result): ?>
-                <li>
-                    <a href="view_page.php?id=<?php echo $result['id']; ?>"><?php echo htmlspecialchars($result['title']); ?></a>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-
-        <!-- Pagination Links -->
-        <div class="pagination">
-            <?php if ($total_pages > 1): ?>
-                <?php if ($page > 1): ?>
-                    <a href="?keyword=<?php echo urlencode($_GET['keyword']); ?>&category_id=<?php echo $category_id; ?>&page=<?php echo $page - 1; ?>">Previous</a>
-                <?php endif; ?>
-                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                    <a href="?keyword=<?php echo urlencode($_GET['keyword']); ?>&category_id=<?php echo $category_id; ?>&page=<?php echo $i; ?>"><?php echo $i; ?></a>
-                <?php endfor; ?>
-                <?php if ($page < $total_pages): ?>
-                    <a href="?keyword=<?php echo urlencode($_GET['keyword']); ?>&category_id=<?php echo $category_id; ?>&page=<?php echo $page + 1; ?>">Next</a>
-                <?php endif; ?>
-            <?php endif; ?>
-        </div>
-    <?php else: ?>
-        <?php if (!$error): ?>
-            <p>No results found for '<?php echo htmlspecialchars($_GET['keyword']); ?>'.</p>
+<body class="bg-light text-dark">
+    <div class="container mt-5">
+        <h1 class="text-custom">Search Results</h1>
+        <?php if ($error): ?>
+            <p class="text-danger"><?php echo $error; ?></p>
         <?php endif; ?>
-    <?php endif; ?>
+        <?php if ($results): ?>
+            <ul class="list-group">
+                <?php foreach ($results as $result): ?>
+                    <li class="list-group-item">
+                        <a href="view_page.php?id=<?php echo $result['id']; ?>"><?php echo htmlspecialchars($result['title']); ?></a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+
+            <!-- Pagination Links -->
+            <nav class="pagination-custom">
+                <?php if ($total_pages > 1): ?>
+                    <?php if ($page > 1): ?>
+                        <a href="?keyword=<?php echo urlencode($_GET['keyword']); ?>&category_id=<?php echo $category_id; ?>&page=<?php echo $page - 1; ?>">Previous</a>
+                    <?php endif; ?>
+                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                        <a href="?keyword=<?php echo urlencode($_GET['keyword']); ?>&category_id=<?php echo $category_id; ?>&page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                    <?php endfor; ?>
+                    <?php if ($page < $total_pages): ?>
+                        <a href="?keyword=<?php echo urlencode($_GET['keyword']); ?>&category_id=<?php echo $category_id; ?>&page=<?php echo $page + 1; ?>">Next</a>
+                    <?php endif; ?>
+                <?php endif; ?>
+            </nav>
+        <?php else: ?>
+            <?php if (!$error): ?>
+                <p>No results found for '<?php echo htmlspecialchars($_GET['keyword']); ?>'.</p>
+            <?php endif; ?>
+        <?php endif; ?>
+    </div>
+
+    <script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
+    <script src="node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -14,7 +14,7 @@ a:hover {
 
 /* Hero Section */
 .hero {
-    background: #3C5B6F; /* Medium Blue background */
+    background: #2f4f4f; /* Medium Blue background */
     color: white;
 }
 
@@ -51,6 +51,18 @@ a:hover {
     color: #153448 !important; /* Dark Blue text for better contrast on hover */
 }
 
+.btn-custom-contrast {
+    background-color: #3587DC;
+    border-color: #3587DC;
+    color: #DFD0B8; /* Light Beige text for better contrast */
+}
+
+.btn-custom-contrast:hover {
+    background-color: #660e0e;
+    border-color: #660e0e;
+    color: #DFD0B8 !important; /* Light Beige text for better contrast on hover */
+}
+
 /* Containers */
 .container-custom {
     background-color: #DFD0B8; /* Light Beige container background */
@@ -62,4 +74,25 @@ a:hover {
 /* Text */
 .text-custom {
     color: #153448; /* Dark Blue text */
+}
+
+/* Pagination */
+.pagination-custom {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.pagination-custom a {
+    margin: 0 5px;
+    text-decoration: none;
+    padding: 8px 12px;
+    border: 1px solid #153448;
+    color: #153448;
+    border-radius: 5px;
+}
+
+.pagination-custom a:hover {
+    background-color: #153448;
+    color: white;
 }
