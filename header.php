@@ -9,15 +9,15 @@ $categories = $stmt->fetchAll();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>My CMS</title>
-    <!-- Link to Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>WYAF</title>
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap CSS -->
+    <link href="styles.css" rel="stylesheet">
 </head>
 <body class="bg-light text-dark">
-    <header class="bg-primary text-white py-3 mb-4">
+    <header class="navbar-custom text-white py-3 mb-4">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
-                <h1 class="h3 font-weight-bold">My CMS</h1>
+                <!-- <h1 class="h3 font-weight-bold">WYAF</h1> -->
                 <form action="search.php" method="get" class="form-inline w-100 max-w-75">
                     <div class="input-group w-100">
                         <input type="text" name="keyword" placeholder="Search..." class="form-control" aria-label="Search">
@@ -28,20 +28,19 @@ $categories = $stmt->fetchAll();
                             <?php endforeach; ?>
                         </select>
                         <div class="input-group-append">
-                            <button type="submit" class="btn btn-warning">Search</button>
+                            <button type="submit" class="btn btn-custom">Search</button>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
     </header>
-    <div class="container">
+    <div class="container mt-4">
         <!-- Add your other page content here -->
     </div>
 
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
+    <script src="node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

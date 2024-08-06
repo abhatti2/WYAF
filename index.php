@@ -8,25 +8,30 @@ session_start();
     <meta charset="UTF-8">
     <title>Home Page</title>
     <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap CSS -->
+    <link href="styles.css" rel="stylesheet"> <!-- External CSS -->
 </head>
 <body class="bg-light text-dark">
-    <div class="container my-4">
-        <h1 class="text-center mb-4">Welcome to the Winnipeg Youth Arts Foundation (WYAF) Website</h1>
+    <div class="container-fluid hero">
+        <div class="hero-overlay text-center">
+            <h1 class="display-4">Welcome to the Winnipeg Youth Arts Foundation (WYAF) Website</h1>
+            <p class="lead">Empowering youth through arts.</p>
+            <?php if (!isset($_SESSION['user_id'])): ?>
+                <a href="login.php" class="btn btn-lg btn-custom">Login</a>
+            <?php endif; ?>
+        </div>
+    </div>
+    <div class="container mt-4">
         <?php if (isset($_SESSION['user_id'])): ?>
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="navbar-nav">
-                    <a class="nav-link" href="list_categories.php">List of Categories</a>
-                    <a class="nav-link" href="list_pages.php">List of Pages</a>
+            <nav class="navbar navbar-expand-lg navbar-custom">
+                <div class="navbar-nav mx-auto">
+                    <a class="nav-link nav-link-custom" href="list_categories.php">List of Categories</a>
+                    <a class="nav-link nav-link-custom" href="list_pages.php">List of Pages</a>
                     <?php if ($_SESSION['role'] == 'admin'): ?>
-                        <a class="nav-link" href="admin.php">Admin Page</a>
+                        <a class="nav-link nav-link-custom" href="admin.php">Admin Page</a>
                     <?php endif; ?>
-                    <a class="nav-link" href="logout.php">Logout</a>
+                    <a class="nav-link nav-link-custom" href="logout.php">Logout</a>
                 </div>
             </nav>
-        <?php else: ?>
-            <div class="text-center">
-                <a href="login.php" class="btn btn-primary">Login</a>
-            </div>
         <?php endif; ?>
     </div>
 

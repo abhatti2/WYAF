@@ -35,7 +35,9 @@ if ($page_id) {
         $comment_text = filter_input(INPUT_POST, 'comment', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $captcha = filter_input(INPUT_POST, 'captcha', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-        if ($captcha !== $_SESSION['captcha']) {
+        if (empty($comment_text)) {
+            $error = 'Comment cannot be empty.';
+        } elseif ($captcha !== $_SESSION['captcha']) {
             $error = 'Incorrect CAPTCHA. Please try again.';
         } else {
             $user_id = $_SESSION['user_id'];
@@ -63,51 +65,63 @@ if ($page_id) {
 <head>
     <meta charset="UTF-8">
     <title><?php echo htmlspecialchars($page['title']); ?></title>
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap CSS -->
+    <link href="styles.css" rel="stylesheet"> <!-- External CSS -->
 </head>
-<body>
-    <h1><?php echo htmlspecialchars($page['title']); ?></h1>
-    <p><?php echo nl2br(htmlspecialchars($page['content'])); ?></p>
+<body class="bg-light text-dark">
+    <div class="container mt-4">
+        <h1 class="text-center mb-4 text-custom"><?php echo htmlspecialchars($page['title']); ?></h1>
+        <p><?php echo nl2br(htmlspecialchars($page['content'])); ?></p>
 
-    <?php if ($image): ?>
-        <img src="<?php echo htmlspecialchars($image['filepath']); ?>" alt="<?php echo htmlspecialchars($image['filename']); ?>" style="max-width: 100%; height: auto;">
-    <?php endif; ?>
+        <?php if ($image): ?>
+            <img src="<?php echo htmlspecialchars($image['filepath']); ?>" alt="<?php echo htmlspecialchars($image['filename']); ?>" class="img-fluid mb-4">
+        <?php endif; ?>
 
-    <h2>Comments</h2>
-    <?php if ($error): ?>
-        <p style="color:red;"><?php echo $error; ?></p>
-    <?php endif; ?>
-    <?php if (isset($_SESSION['user_id'])): ?>
-        <form method="POST" action="view_page.php?id=<?php echo $page_id; ?>">
-            <label for="comment">Add a comment:</label><br>
-            <textarea id="comment" name="comment" required><?php echo htmlspecialchars($comment_text); ?></textarea><br><br>
+        <h2 class="text-custom mb-4">Comments</h2>
+        <?php if ($error): ?>
+            <p class="text-danger mb-4"><?php echo $error; ?></p>
+        <?php endif; ?>
+        <?php if (isset($_SESSION['user_id'])): ?>
+            <form method="POST" action="view_page.php?id=<?php echo $page_id; ?>" class="mb-5"> <!-- Increased bottom margin -->
+                <div class="form-group mb-3">
+                    <label for="comment">Add a comment:</label>
+                    <textarea id="comment" name="comment" class="form-control"><?php echo htmlspecialchars($comment_text); ?></textarea>
+                </div>
 
-            <label for="captcha">Enter the CAPTCHA:</label><br>
-            <img src="captcha.php" alt="CAPTCHA"><br><br>
-            <input type="text" id="captcha" name="captcha" required><br><br>
+                <div class="form-group mb-3">
+                    <label for="captcha">Enter the CAPTCHA:</label><br>
+                    <img src="captcha.php" alt="CAPTCHA" class="mb-2"><br>
+                    <input type="text" id="captcha" name="captcha" class="form-control">
+                </div>
 
-            <button type="submit">Submit Comment</button>
-        </form>
-    <?php else: ?>
-        <p>You must be logged in to comment. <a href="login.php">Login here</a></p>
-    <?php endif; ?>
+                <button type="submit" class="btn btn-custom mt-3">Submit Comment</button>
+            </form>
+        <?php else: ?>
+            <p>You must be logged in to comment. <a href="login.php" class="text-custom">Login here</a></p>
+        <?php endif; ?>
 
-    <?php if ($comments): ?>
-        <ul>
-            <?php foreach ($comments as $comment): ?>
-                <li>
-                    <strong><?php echo htmlspecialchars($comment['name']); ?>:</strong>
-                    <p><?php echo nl2br(htmlspecialchars($comment['comment'])); ?></p>
-                    <small><?php echo $comment['created_at']; ?></small>
-                    <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin'): ?>
-                        <a href="delete_comment.php?id=<?php echo $comment['id']; ?>&page_id=<?php echo $page_id; ?>" onclick="return confirm('Are you sure you want to delete this comment?');">Delete</a>
-                    <?php endif; ?>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-    <?php else: ?>
-        <p>No comments yet. Be the first to comment!</p>
-    <?php endif; ?>
+        <?php if ($comments): ?>
+            <ul class="list-group mb-4">
+                <?php foreach ($comments as $comment): ?>
+                    <li class="list-group-item mb-2">
+                        <strong><?php echo htmlspecialchars($comment['name']); ?>:</strong>
+                        <p><?php echo nl2br(htmlspecialchars($comment['comment'])); ?></p>
+                        <small><?php echo $comment['created_at']; ?></small>
+                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin'): ?>
+                            <a href="delete_comment.php?id=<?php echo $comment['id']; ?>&page_id=<?php echo $page_id; ?>" onclick="return confirm('Are you sure you want to delete this comment?');" class="text-danger">Delete</a>
+                        <?php endif; ?>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php else: ?>
+            <p>No comments yet. Be the first to comment!</p>
+        <?php endif; ?>
 
-    <a href="list_pages.php">Back to list</a>
+        <a href="list_pages.php" class="btn btn-secondary mt-4">Back to list</a>
+    </div>
+
+    <script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
+    <script src="node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

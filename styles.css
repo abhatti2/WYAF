@@ -1,0 +1,60 @@
+/* General Styles */
+body {
+    background-color: #DFD0B8; /* Light Beige background */
+    color: #153448; /* Dark Blue text */
+}
+
+a {
+    color: #3C5B6F; /* Medium Blue links */
+}
+
+a:hover {
+    color: #948979; /* Warm Gray links on hover */
+}
+
+/* Hero Section */
+.hero {
+    background: url('path_to_your_image.jpg') no-repeat center center;
+    background-size: cover;
+    color: white;
+}
+
+.hero-overlay {
+    background: rgba(21, 52, 72, 0.8); /* Semi-transparent overlay with #153448 color */
+    padding: 100px 0;
+}
+
+/* Navbar */
+.navbar-custom {
+    background-color: #153448; /* Navbar background color */
+}
+
+.nav-link-custom {
+    color: #DFD0B8 !important; /* Navbar link color - Light Beige for better contrast */
+}
+
+/* Buttons */
+.btn-custom {
+    background-color: #3C5B6F;
+    border-color: #3C5B6F;
+    color: #DFD0B8; /* Light Beige text for better contrast */
+}
+
+.btn-custom:hover {
+    background-color: #948979;
+    border-color: #948979;
+    color: #153448 !important; /* Dark Blue text for better contrast on hover */
+}
+
+/* Containers */
+.container-custom {
+    background-color: #DFD0B8; /* Light Beige container background */
+    border: 1px solid #3C5B6F; /* Medium Blue border */
+    padding: 20px;
+    border-radius: 5px;
+}
+
+/* Text */
+.text-custom {
+    color: #153448; /* Dark Blue text */
+}
