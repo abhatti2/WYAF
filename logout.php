@@ -1,6 +1,11 @@
 <?php
 session_start();
 
+// React
+session_unset();
+session_destroy();
+header("Location: login.php");
+
 // Unset all session variables
 $_SESSION = array();
 
@@ -11,3 +16,4 @@ session_destroy();
 header("Location: login.php?message=Successfully logged out");
 exit;
 ?>
+

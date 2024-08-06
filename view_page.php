@@ -3,6 +3,39 @@ session_start();
 include 'config.php';
 include 'header.php'; // Include the header file
 
+// // React
+
+// header('Content-Type: application/json');
+
+// $page_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+// if (!$page_id) {
+//     http_response_code(400);
+//     echo json_encode(['error' => 'Invalid page ID.']);
+//     exit;
+// }
+
+// $stmt = $pdo->prepare("SELECT * FROM pages WHERE id = ?");
+// $stmt->execute([$page_id]);
+// $page = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// if (!$page) {
+//     http_response_code(404);
+//     echo json_encode(['error' => 'Page not found.']);
+//     exit;
+// }
+
+// // Optionally, fetch associated image
+// $image_stmt = $pdo->prepare("SELECT * FROM images WHERE page_id = ?");
+// $image_stmt->execute([$page_id]);
+// $image = $image_stmt->fetch(PDO::FETCH_ASSOC);
+// if ($image) {
+//     $page['image'] = $image['filepath'];
+// }
+
+// echo json_encode($page);
+
+// //React
+
 // Enable error reporting for debugging
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
