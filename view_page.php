@@ -117,7 +117,7 @@ if ($page_id) {
             <p>No comments yet. Be the first to comment!</p>
         <?php endif; ?>
 
-        <a href="list_pages.php" class="btn btn-secondary mt-4">Back to list</a>
+        <a href="list_pages.php" class="btn btn-secondary mt-4 mb-5">Back to list</a> <!-- Added bottom margin -->
     </div>
 
     <script src="node_modules/jquery/dist/jquery.slim.min.js"></script>

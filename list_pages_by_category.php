@@ -39,14 +39,30 @@ if ($category_id) {
 <head>
     <meta charset="UTF-8">
     <title>Pages in <?php echo htmlspecialchars($category['name']); ?></title>
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap CSS -->
+    <link href="styles.css" rel="stylesheet"> <!-- External CSS -->
 </head>
-<body>
-    <h1>Pages in <?php echo htmlspecialchars($category['name']); ?></h1>
-    <ul>
-        <?php foreach ($pages as $page): ?>
-            <li><a href="view_page.php?id=<?php echo $page['id']; ?>"><?php echo htmlspecialchars($page['title']); ?></a></li>
-        <?php endforeach; ?>
-    </ul>
-    <a href="list_categories.php">Back to Categories</a>
+<body class="bg-light text-dark">
+    <div class="container mt-4">
+        <h1 class="text-center mb-4 text-custom">Pages in <?php echo htmlspecialchars($category['name']); ?></h1>
+        <?php if ($pages): ?>
+            <ul class="list-group mb-4">
+                <?php foreach ($pages as $page): ?>
+                    <li class="list-group-item">
+                        <a href="view_page.php?id=<?php echo $page['id']; ?>" class="text-decoration-none text-custom">
+                            <?php echo htmlspecialchars($page['title']); ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php else: ?>
+            <p>No pages found in this category.</p>
+        <?php endif; ?>
+        <a href="list_categories.php" class="btn btn-secondary mt-4">Back to Categories</a>
+    </div>
+
+    <script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
+    <script src="node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
