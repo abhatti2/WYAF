@@ -120,6 +120,8 @@ if ($page_id) {
         <a href="list_pages.php" class="btn btn-secondary mt-4 mb-5">Back to list</a> <!-- Added bottom margin -->
     </div>
 
+    <?php include 'footer.php'; ?>
+
     <script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
     <script src="node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
     <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>

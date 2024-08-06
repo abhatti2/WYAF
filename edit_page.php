@@ -2,6 +2,7 @@
 // Start the session and include the database configuration file
 session_start();
 include 'config.php';
+include 'header.php'; // Include the header file
 
 // Enable error reporting for debugging
 ini_set('display_errors', 1);
@@ -173,35 +174,83 @@ $categories = $stmt->fetchAll();
 <head>
     <meta charset="UTF-8">
     <title>Edit Page</title>
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap CSS -->
+    <link href="styles.css" rel="stylesheet"> <!-- External CSS -->
 </head>
-<body>
-    <h1>Edit Page</h1>
-    <form method="POST" action="edit_page.php?id=<?php echo $page_id; ?>" enctype="multipart/form-data">
-        <label for="title">Title:</label>
-        <input type="text" id="title" name="title" value="<?php echo htmlspecialchars($page['title']); ?>" required><br><br>
+<body class="bg-light text-dark">
+    <div class="container mt-4">
+        <h1 class="text-center mb-4 text-custom">Edit Page</h1>
+        <form method="POST" action="edit_page.php?id=<?php echo $page_id; ?>" enctype="multipart/form-data" class="needs-validation" novalidate>
+            <div class="form-group mb-3">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" class="form-control" value="<?php echo htmlspecialchars($page['title']); ?>" required>
+                <div class="invalid-feedback">Please provide a title.</div>
+            </div>
 
-        <label for="content">Content:</label>
-        <textarea id="content" name="content" required><?php echo htmlspecialchars($page['content']); ?></textarea><br><br>
+            <div class="form-group mb-3">
+                <label for="content">Content:</label>
+                <textarea id="content" name="content" class="form-control" required><?php echo htmlspecialchars($page['content']); ?></textarea>
+                <div class="invalid-feedback">Please provide content.</div>
+            </div>
 
-        <label for="category">Category:</label>
-        <select id="category" name="category_id" required>
-            <option value="">Select a category</option>
-            <?php foreach ($categories as $category): ?>
-                <option value="<?php echo $category['id']; ?>" <?php if ($category['id'] == $page['category_id']) echo 'selected'; ?>><?php echo htmlspecialchars($category['name']); ?></option>
-            <?php endforeach; ?>
-        </select><br><br>
+            <div class="form-group mb-3">
+                <label for="category">Category:</label>
+                <select id="category" name="category_id" class="form-control" required>
+                    <option value="">Select a category</option>
+                    <?php foreach ($categories as $category): ?>
+                        <option value="<?php echo $category['id']; ?>" <?php if ($category['id'] == $page['category_id']) echo 'selected'; ?>>
+                            <?php echo htmlspecialchars($category['name']); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                <div class="invalid-feedback">Please select a category.</div>
+            </div>
 
-        <?php if ($image): ?>
-            <label>Current Image:</label><br>
-            <img src="<?php echo htmlspecialchars($image['filepath']); ?>" alt="<?php echo htmlspecialchars($image['filename']); ?>" style="max-width: 100%; height: auto;"><br>
-            <label for="delete_image">Delete this image</label>
-            <input type="checkbox" id="delete_image" name="delete_image"><br><br>
-        <?php endif; ?>
+            <?php if ($image): ?>
+                <div class="form-group mb-3">
+                    <label>Current Image:</label><br>
+                    <img src="<?php echo htmlspecialchars($image['filepath']); ?>" alt="<?php echo htmlspecialchars($image['filename']); ?>" class="img-fluid mb-2"><br>
+                    <div class="form-check">
+                        <input type="checkbox" id="delete_image" name="delete_image" class="form-check-input">
+                        <label for="delete_image" class="form-check-label">Delete this image</label>
+                    </div>
+                </div>
+            <?php endif; ?>
 
-        <label for="image">Upload New Image (optional):</label>
-        <input type="file" id="image" name="image" accept="image/*"><br><br>
+            <div class="form-group mb-3">
+                <label for="image">Upload New Image (optional):</label>
+                <input type="file" id="image" name="image" class="form-control-file">
+            </div>
 
-        <button type="submit">Update Page</button>
-    </form>
+            <button type="submit" class="btn btn-custom mt-3 mb-4">Update Page</button>
+        </form>
+    </div>
+
+    <script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
+    <script src="node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+
+    <?php include 'footer.php'; ?>
+    
 </body>
 </html>
