@@ -14,8 +14,7 @@ a:hover {
 
 /* Hero Section */
 .hero {
-    background: url('path_to_your_image.jpg') no-repeat center center;
-    background-size: cover;
+    background: #3C5B6F; /* Medium Blue background */
     color: white;
 }
 
@@ -30,7 +29,13 @@ a:hover {
 }
 
 .nav-link-custom {
-    color: #DFD0B8 !important; /* Navbar link color - Light Beige for better contrast */
+    color: #0c3754 !important; /* Navbar link color */
+    margin-right: 15px; /* Even spacing between links */
+    font-weight: 500;
+}
+
+.nav-link-custom:hover {
+    color: #660e0e !important; /* Warm Gray on hover */
 }
 
 /* Buttons */
