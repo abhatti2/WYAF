@@ -2,6 +2,7 @@
 // Start the session and include the database configuration file
 session_start();
 include 'config.php';
+include 'header.php'; // Include header for consistent styling
 
 // Enable error reporting for debugging
 ini_set('display_errors', 1);
@@ -69,11 +70,25 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
 }
 
 // Handle the form submission
+$errors = [];
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Validate and sanitize input
     $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING);
     $content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_STRING);
     $category_id = filter_input(INPUT_POST, 'category_id', FILTER_VALIDATE_INT);
+
+    if (!$title) {
+        $errors[] = "Title is required.";
+    }
+
+    if (!$content) {
+        $errors[] = "Content is required.";
+    }
+
+    if (!$category_id) {
+        $errors[] = "Category is required.";
+    }
+
     $user_id = $_SESSION['user_id'];
 
     // Handle image upload
@@ -88,25 +103,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Check if the uploaded file is an image
         $image_info = getimagesize($image_tmp_path);
         if ($image_info === FALSE) {
-            echo "Uploaded file is not a valid image.";
-            exit;
-        }
-
-        // Resize the image
-        $resized_image_path = 'uploads/resized_' . $image_filename;
-        if (!resizeImage($image_tmp_path, $resized_image_path, 800, 800)) {
-            echo "Failed to resize image.";
-            exit;
-        }
-
-        // Move the resized image to the designated directory
-        if (!rename($resized_image_path, $image_filepath)) {
-            echo "Failed to move uploaded file.";
-            exit;
+            $errors[] = "Uploaded file is not a valid image.";
+        } else {
+            // Resize the image
+            $resized_image_path = 'uploads/resized_' . $image_filename;
+            if (!resizeImage($image_tmp_path, $resized_image_path, 800, 800)) {
+                $errors[] = "Failed to resize image.";
+            } else {
+                // Move the resized image to the designated directory
+                if (!rename($resized_image_path, $image_filepath)) {
+                    $errors[] = "Failed to move uploaded file.";
+                }
+            }
         }
     }
 
-    if ($title && $content && $category_id) {
+    if (empty($errors)) {
         // Prepare and execute the SQL statement to insert the new page into the database
         $pdo->beginTransaction();
         try {
@@ -126,8 +138,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $pdo->rollBack();
             echo "Failed to create page: " . $e->getMessage();
         }
-    } else {
-        echo "Invalid input. Please fill in all fields correctly.";
     }
 }
 
@@ -141,28 +151,55 @@ $categories = $stmt->fetchAll();
 <head>
     <meta charset="UTF-8">
     <title>Create New Page</title>
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap CSS -->
+    <link href="styles.css" rel="stylesheet"> <!-- External CSS -->
 </head>
-<body>
-    <h1>Create New Page</h1>
-    <form method="POST" action="create_page.php" enctype="multipart/form-data">
-        <label for="title">Title:</label>
-        <input type="text" id="title" name="title" required><br><br>
+<body class="bg-light text-dark">
+    <div class="container mt-5">
+        <h1 class="text-custom mb-4">Create New Page</h1>
 
-        <label for="content">Content:</label>
-        <textarea id="content" name="content" required></textarea><br><br>
+        <?php if (!empty($errors)): ?>
+            <div class="alert alert-danger">
+                <ul>
+                    <?php foreach ($errors as $error): ?>
+                        <li><?php echo htmlspecialchars($error); ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
 
-        <label for="category">Category:</label>
-        <select id="category" name="category_id" required>
-            <option value="">Select a category</option>
-            <?php foreach ($categories as $category): ?>
-                <option value="<?php echo $category['id']; ?>"><?php echo htmlspecialchars($category['name']); ?></option>
-            <?php endforeach; ?>
-        </select><br><br>
+        <form method="POST" action="create_page.php" enctype="multipart/form-data" class="container-custom p-4 mt-4">
+            <div class="form-group mb-3">
+                <label for="title" class="text-custom">Title:</label>
+                <input type="text" id="title" name="title" class="form-control" value="<?php echo htmlspecialchars($title ?? ''); ?>">
+            </div>
 
-        <label for="image">Image (optional):</label>
-        <input type="file" id="image" name="image" accept="image/*"><br><br>
+            <div class="form-group mb-3">
+                <label for="content" class="text-custom">Content:</label>
+                <textarea id="content" name="content" class="form-control" rows="5"><?php echo htmlspecialchars($content ?? ''); ?></textarea>
+            </div>
 
-        <button type="submit">Create Page</button>
-    </form>
+            <div class="form-group mb-3">
+                <label for="category" class="text-custom">Category:</label>
+                <select id="category" name="category_id" class="form-control">
+                    <option value="">Select a category</option>
+                    <?php foreach ($categories as $category): ?>
+                        <option value="<?php echo $category['id']; ?>" <?php echo isset($category_id) && $category_id == $category['id'] ? 'selected' : ''; ?>><?php echo htmlspecialchars($category['name']); ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="image" class="text-custom">Image (optional):</label>
+                <input type="file" id="image" name="image" class="form-control-file" accept="image/*">
+            </div>
+
+            <button type="submit" class="btn btn-custom mt-3">Create Page</button>
+        </form>
+    </div>
+
+    <script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
+    <script src="node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
