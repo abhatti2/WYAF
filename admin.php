@@ -28,16 +28,9 @@ $pages = $stmt->fetchAll();
 <head>
     <meta charset="UTF-8">
     <title>Admin Page</title>
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap CSS -->
+    <link href="styles.css" rel="stylesheet"> <!-- External CSS -->
     <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
         th {
             cursor: pointer;
         }
@@ -49,31 +42,40 @@ $pages = $stmt->fetchAll();
         }
     </style>
 </head>
-<body>
-    <h1>Admin Page</h1>
-    <a href="create_page.php">Create New Page</a>
-    <table>
-        <thead>
-            <tr>
-                <th><a href="?sort_by=title" class="<?php echo $sort_by == 'title' ? 'sort-asc' : ''; ?>">Title</a></th>
-                <th><a href="?sort_by=created_at" class="<?php echo $sort_by == 'created_at' ? 'sort-asc' : ''; ?>">Created At</a></th>
-                <th><a href="?sort_by=updated_at" class="<?php echo $sort_by == 'updated_at' ? 'sort-asc' : ''; ?>">Updated At</a></th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($pages as $page): ?>
-            <tr>
-                <td><?php echo htmlspecialchars($page['title']); ?></td>
-                <td><?php echo $page['created_at']; ?></td>
-                <td><?php echo $page['updated_at']; ?></td>
-                <td>
-                    <a href="edit_page.php?id=<?php echo $page['id']; ?>">Edit</a>
-                    <a href="delete_page.php?id=<?php echo $page['id']; ?>" onclick="return confirm('Are you sure you want to delete this page?');">Delete</a>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+<body class="bg-light text-dark">
+    <?php include 'header.php'; ?> <!-- Include the header -->
+    <div class="container mt-4">
+        <h1 class="text-center mb-4 text-custom">Admin Page</h1>
+        <div class="d-flex justify-content-end mb-3">
+            <a href="create_page.php" class="btn btn-custom">Create New Page</a>
+        </div>
+        <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th><a href="?sort_by=title" class="<?php echo $sort_by == 'title' ? 'sort-asc' : ''; ?>">Title</a></th>
+                    <th><a href="?sort_by=created_at" class="<?php echo $sort_by == 'created_at' ? 'sort-asc' : ''; ?>">Created At</a></th>
+                    <th><a href="?sort_by=updated_at" class="<?php echo $sort_by == 'updated_at' ? 'sort-asc' : ''; ?>">Updated At</a></th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($pages as $page): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($page['title']); ?></td>
+                    <td><?php echo $page['created_at']; ?></td>
+                    <td><?php echo $page['updated_at']; ?></td>
+                    <td>
+                        <a href="edit_page.php?id=<?php echo $page['id']; ?>" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="delete_page.php?id=<?php echo $page['id']; ?>" onclick="return confirm('Are you sure you want to delete this page?');" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
+    <script src="node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

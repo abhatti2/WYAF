@@ -32,7 +32,7 @@ $categories = $stmt->fetchAll();
         <div class="container">
             <div class="d-flex justify-content-start align-items-center">
                 <a href="index.php">
-                    <img src="images/painting_505910.png" alt="Logo" class="header-logo"> <!-- Replace with the correct path -->
+                    <img src="images/artistic_360090.png" alt="Logo" class="header-logo"> <!-- Replace with the correct path -->
                 </a>
                 <!-- <h1 class="h3 font-weight-bold header-title">WYAF</h1> -->
                 <form action="search.php" method="get" class="form-inline w-100 search-form">
