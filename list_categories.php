@@ -41,6 +41,7 @@ $categories = $stmt->fetchAll();
                     <tr>
                         <th>Name</th>
                         <th>Description</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,6 +49,13 @@ $categories = $stmt->fetchAll();
                     <tr>
                         <td><?php echo htmlspecialchars($category['name']); ?></td>
                         <td><?php echo htmlspecialchars($category['description']); ?></td>
+                        <td>
+                            <a href="view_category.php?id=<?php echo $category['id']; ?>" class="btn btn-info btn-sm">View</a>
+                            <?php if ($_SESSION['role'] == 'admin'): ?>
+                            <a href="edit_category.php?id=<?php echo $category['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="delete_category.php?id=<?php echo $category['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this category?');">Delete</a>
+                            <?php endif; ?>
+                        </td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
