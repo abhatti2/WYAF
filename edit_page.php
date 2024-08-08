@@ -88,8 +88,8 @@ $image = $stmt->fetch();
 // Handle the form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Validate and sanitize input
-    $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING);
-    $content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_STRING);
+    $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $category_id = filter_input(INPUT_POST, 'category_id', FILTER_VALIDATE_INT);
 
     // Handle image upload
