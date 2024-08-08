@@ -40,8 +40,8 @@ $pages = $stmt->fetchAll();
     <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap CSS -->
     <link href="styles.css" rel="stylesheet"> <!-- External CSS -->
 </head>
-<body class="bg-light text-dark">
-    <div class="container mt-5">
+<body class="bg-light text-dark d-flex flex-column min-vh-100">
+    <div class="container mt-5 flex-grow-1">
         <h1 class="text-custom"><?php echo htmlspecialchars($category['name']); ?></h1>
         <p class="text-custom"><?php echo htmlspecialchars($category['description']); ?></p>
 
@@ -58,7 +58,9 @@ $pages = $stmt->fetchAll();
         <p>No pages found in the <?php echo htmlspecialchars($category['name']); ?> category.</p>
         <?php endif; ?>
     </div>
-    
+
+    <?php include 'footer.php'; ?>
+
     <script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
     <script src="node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
     <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>

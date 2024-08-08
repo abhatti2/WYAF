@@ -1,5 +1,6 @@
 <?php
 session_start();
+include 'header.php';
 include 'config.php';
 
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
@@ -27,17 +28,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Create Category</title>
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap CSS -->
+    <link href="styles.css" rel="stylesheet"> <!-- External CSS -->
 </head>
-<body>
-    <h1>Create Category</h1>
-    <form method="POST" action="create_category.php">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required><br><br>
+<body class="bg-light text-dark d-flex flex-column min-vh-100">
+    <div class="container mt-5 flex-grow-1">
+        <h1 class="text-custom">Create Category</h1>
+        <form method="POST" action="create_category.php">
+            <div class="mb-3">
+                <label for="name" class="form-label">Name:</label>
+                <input type="text" id="name" name="name" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description:</label>
+                <textarea id="description" name="description" class="form-control"></textarea>
+            </div>
+            <button type="submit" class="btn btn-custom">Create Category</button>
+        </form>
+    </div>
 
-        <label for="description">Description:</label>
-        <textarea id="description" name="description"></textarea><br><br>
+    <?php include 'footer.php'; ?>
 
-        <button type="submit">Create Category</button>
-    </form>
+    <script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
+    <script src="node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

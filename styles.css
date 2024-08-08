@@ -96,3 +96,28 @@ a:hover {
     background-color: #153448;
     color: white;
 }
+
+/* Keeps footer at the bottom */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-grow-1 {
+    flex-grow: 1;
+}
+
+footer {
+    background-color: #DFD0B8;
+    color: #15344877;
+    text-align: center;
+    padding: 10px 0;
+    position: relative;
+    width: 100%;
+}

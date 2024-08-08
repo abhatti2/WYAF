@@ -35,30 +35,50 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Register</title>
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap CSS -->
+    <link href="styles.css" rel="stylesheet"> <!-- External CSS -->
 </head>
-<body>
-    <h1>Register</h1>
-    <?php if ($error): ?>
-        <p style="color:red;"><?php echo $error; ?></p>
-    <?php endif; ?>
-    <?php if ($success): ?>
-        <p style="color:green;"><?php echo $success; ?></p>
-    <?php endif; ?>
-    <form action="register.php" method="post">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br><br>
+<body class="bg-light text-dark d-flex flex-column min-vh-100">
+    <div class="container mt-5 flex-grow-1">
+        <h1 class="text-custom">Register</h1>
+        <?php if ($error): ?>
+            <div class="alert alert-danger" role="alert">
+                <?php echo $error; ?>
+            </div>
+        <?php endif; ?>
+        <?php if ($success): ?>
+            <div class="alert alert-success" role="alert">
+                <?php echo $success; ?>
+            </div>
+        <?php endif; ?>
+        <form action="register.php" method="post" class="mt-4">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email:</label>
+                <input type="email" id="email" name="email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="username" class="form-label">Username:</label>
+                <input type="text" id="username" name="username" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password:</label>
+                <input type="password" id="password" name="password" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="confirm_password" class="form-label">Confirm Password:</label>
+                <input type="password" id="confirm_password" name="confirm_password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-custom">Register</button>
+        </form>
+        <div class="mt-3">
+            <a href="login.php" class="btn btn-link">Login</a>
+        </div>
+    </div>
 
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required><br><br>
+    <?php include 'footer.php'; ?>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br><br>
-
-        <label for="confirm_password">Confirm Password:</label>
-        <input type="password" id="confirm_password" name="confirm_password" required><br><br>
-
-        <button type="submit">Register</button>
-    </form>
-    <a href="login.php">Login</a>
+    <script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
+    <script src="node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

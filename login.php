@@ -2,7 +2,6 @@
 session_start();
 include 'config.php';
 
-// Initialize variables
 $error = '';
 $message = '';
 
@@ -49,23 +48,39 @@ if (isset($_GET['message'])) {
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap CSS -->
+    <link href="styles.css" rel="stylesheet"> <!-- External CSS -->
 </head>
-<body>
-    <h1>Login</h1>
-    <?php if ($error): ?>
-        <p style="color:red;"><?php echo $error; ?></p>
-    <?php endif; ?>
-    <?php if ($message): ?>
-        <p style="color:green;"><?php echo $message; ?></p>
-    <?php endif; ?>
-    <form action="login.php" method="post">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br><br>
+<body class="bg-light text-dark d-flex flex-column min-vh-100">
+    <div class="container mt-5 flex-grow-1">
+        <h1 class="text-custom">Login</h1>
+        <?php if ($error): ?>
+            <div class="alert alert-danger" role="alert">
+                <?php echo $error; ?>
+            </div>
+        <?php endif; ?>
+        <?php if ($message): ?>
+            <div class="alert alert-success" role="alert">
+                <?php echo $message; ?>
+            </div>
+        <?php endif; ?>
+        <form action="login.php" method="post" class="mt-4">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email:</label>
+                <input type="email" id="email" name="email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password:</label>
+                <input type="password" id="password" name="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-custom">Login</button>
+        </form>
+    </div>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br><br>
+    <?php include 'footer.php'; ?>
 
-        <button type="submit">Login</button>
-    </form>
+    <script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
+    <script src="node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
