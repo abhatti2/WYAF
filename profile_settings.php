@@ -91,6 +91,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <a href="welcome.php" class="btn btn-outline-secondary">Back to Dashboard</a>
         </div>
     </div>
+    
+    <?php include 'footer.php'; ?>
 
     <script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
     <script src="node_modules/@popperjs/core/dist/umd/popper.min.js"></script>

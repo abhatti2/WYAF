@@ -2,6 +2,10 @@
 body {
     background-color: #DFD0B8; /* Light Beige background */
     color: #153448; /* Dark Blue text */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
 }
 
 a {
@@ -97,27 +101,23 @@ a:hover {
     color: white;
 }
 
-/* Keeps footer at the bottom */
+/* Footer */
 html, body {
     height: 100%;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-}
-
-.flex-grow-1 {
-    flex-grow: 1;
 }
 
 footer {
-    background-color: #DFD0B8;
+    background-color: #153448;
     color: #15344877;
     text-align: center;
     padding: 10px 0;
-    position: relative;
+    /* position: relative; */
+    /* bottom: 0; */
     width: 100%;
+    margin-top: auto;
 }
+
+.container {
+    flex: 1;
+}
+

@@ -3,6 +3,10 @@
 session_start();
 include 'config.php';
 
+if ($_SESSION['role'] == 'admin') {
+    echo '<a href="manage_users.php" class="btn btn-custom mb-4">Manage Users</a>';
+}
+
 // Check if the user is logged in and has an admin role
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
     header("Location: login.php");

@@ -1,4 +1,4 @@
-<footer class="bg-light text-center py-3 mt-4">
+<footer class="bg-light text-center py-3 mt-4 footer">
     <p class="mb-0">&copy; 2024 Winnipeg Youth Arts Foundation</p>
 </footer>
 
