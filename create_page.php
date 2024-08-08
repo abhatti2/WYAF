@@ -2,7 +2,7 @@
 // Start the session and include the database configuration file
 session_start();
 include 'config.php';
-include 'header.php'; // Include header for consistent styling
+include 'header.php';
 
 // Enable error reporting for debugging
 ini_set('display_errors', 1);
@@ -63,8 +63,8 @@ function resizeImage($sourcePath, $destPath, $maxWidth, $maxHeight) {
     return true;
 }
 
-// Check if the user is logged in and has an admin role
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
+// Check if the user is logged in
+if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;
 }
@@ -73,8 +73,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
 $errors = [];
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Validate and sanitize input
-    $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING);
-    $content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_STRING);
+    $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $category_id = filter_input(INPUT_POST, 'category_id', FILTER_VALIDATE_INT);
 
     if (!$title) {
@@ -122,8 +122,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Prepare and execute the SQL statement to insert the new page into the database
         $pdo->beginTransaction();
         try {
-            $stmt = $pdo->prepare("INSERT INTO pages (title, content, category_id, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW())");
-            $stmt->execute([$title, $content, $category_id]);
+            $stmt = $pdo->prepare("INSERT INTO pages (title, content, category_id, user_id, created_at, updated_at, approved) VALUES (?, ?, ?, ?, NOW(), NOW(), FALSE)");
+            $stmt->execute([$title, $content, $category_id, $user_id]);
             $page_id = $pdo->lastInsertId();
 
             if ($image_filename && $image_filepath) {
@@ -132,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
 
             $pdo->commit();
-            header("Location: admin.php");
+            header("Location: welcome.php");
             exit;
         } catch (Exception $e) {
             $pdo->rollBack();
