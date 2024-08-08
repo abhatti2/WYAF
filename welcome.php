@@ -41,7 +41,7 @@ $totalCategories = 8; // Example: $pdo->query("SELECT COUNT(*) FROM categories")
                 <?php endif; ?>
             </div>
             <div class="col-md-4 text-center">
-                <img src="images/painting_3369352.png" alt="Profile Picture" class="img-fluid rounded-circle mb-2" style="max-width: 150px;">
+                <img src="images/palette_12332575.png" alt="Profile Picture" class="img-fluid rounded-circle mb-2" style="max-width: 150px;">
                 <p><a href="profile_settings.php" class="btn btn-success btn-sm">Profile Settings</a></p>
             </div>
         </div>

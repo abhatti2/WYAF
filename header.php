@@ -11,7 +11,7 @@ $categories = $stmt->fetchAll();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>WYAF CMS</title>
+    <title>WYAF</title>
     <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap CSS -->
     <link href="styles.css" rel="stylesheet"> <!-- External CSS -->
 </head>
