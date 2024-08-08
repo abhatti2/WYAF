@@ -2,7 +2,7 @@
 // Start the session and include the database configuration file
 session_start();
 include 'config.php';
-include 'header.php';
+include 'header.php'; // Include header for consistent styling
 
 // Enable error reporting for debugging
 ini_set('display_errors', 1);
@@ -61,12 +61,6 @@ function resizeImage($sourcePath, $destPath, $maxWidth, $maxHeight) {
     imagedestroy($newImage);
 
     return true;
-}
-
-// Check if the user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit;
 }
 
 // Handle the form submission
@@ -132,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
 
             $pdo->commit();
-            header("Location: welcome.php");
+            header("Location: list_pages.php");
             exit;
         } catch (Exception $e) {
             $pdo->rollBack();

@@ -21,6 +21,17 @@ if (!in_array($sort_by, $valid_sort_columns)) {
 $stmt = $pdo->prepare("SELECT * FROM pages ORDER BY $sort_by");
 $stmt->execute();
 $pages = $stmt->fetchAll();
+
+// Handle page approval
+if (isset($_GET['approve_id'])) {
+    $approve_id = filter_input(INPUT_GET, 'approve_id', FILTER_VALIDATE_INT);
+    if ($approve_id) {
+        $stmt = $pdo->prepare("UPDATE pages SET approved = TRUE WHERE id = ?");
+        $stmt->execute([$approve_id]);
+        header("Location: admin.php");
+        exit;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -55,6 +66,7 @@ $pages = $stmt->fetchAll();
                     <th><a href="?sort_by=title" class="<?php echo $sort_by == 'title' ? 'sort-asc' : ''; ?>">Title</a></th>
                     <th><a href="?sort_by=created_at" class="<?php echo $sort_by == 'created_at' ? 'sort-asc' : ''; ?>">Created At</a></th>
                     <th><a href="?sort_by=updated_at" class="<?php echo $sort_by == 'updated_at' ? 'sort-asc' : ''; ?>">Updated At</a></th>
+                    <th>Approved</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -64,7 +76,11 @@ $pages = $stmt->fetchAll();
                     <td><?php echo htmlspecialchars($page['title']); ?></td>
                     <td><?php echo $page['created_at']; ?></td>
                     <td><?php echo $page['updated_at']; ?></td>
+                    <td><?php echo $page['approved'] ? 'Yes' : 'No'; ?></td>
                     <td>
+                        <?php if (!$page['approved']): ?>
+                        <a href="?approve_id=<?php echo $page['id']; ?>" class="btn btn-sm btn-success">Approve</a>
+                        <?php endif; ?>
                         <a href="edit_page.php?id=<?php echo $page['id']; ?>" class="btn btn-sm btn-warning">Edit</a>
                         <a href="delete_page.php?id=<?php echo $page['id']; ?>" onclick="return confirm('Are you sure you want to delete this page?');" class="btn btn-sm btn-danger">Delete</a>
                     </td>

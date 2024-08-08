@@ -1,27 +1,24 @@
 <?php
-// Start the session and include the database configuration file
 session_start();
 include 'config.php';
 
-// Check if the user is logged in and has an admin role
+// Check if the user is an admin
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
     header("Location: login.php");
     exit;
 }
 
-// Check if the page ID is provided
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
-
-    // Delete the page from the database
-    $stmt = $pdo->prepare("DELETE FROM pages WHERE id = ?");
-    $stmt->execute([$id]);
-
-    // Redirect to the admin page after successful deletion
-    header("Location: admin.php");
-    exit;
-} else {
-    echo "Page ID not provided.";
+// Validate and get the page ID
+$page_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+if ($page_id <= 0) {
+    echo "Invalid page ID.";
     exit;
 }
+
+// Delete the page
+$stmt = $pdo->prepare("DELETE FROM pages WHERE id = ?");
+$stmt->execute([$page_id]);
+
+header("Location: admin_approve_pages.php");
+exit;
 ?>

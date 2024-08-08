@@ -52,8 +52,6 @@ $pages = $stmt->fetchAll();
             <p>No pages pending approval.</p>
         <?php endif; ?>
     </div>
-
-    <?php include 'footer.php'; ?>
     
     <script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
     <script src="node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
