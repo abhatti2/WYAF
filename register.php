@@ -1,6 +1,5 @@
 <?php
 include 'config.php';
-include 'header.php';
 
 $error = '';
 $success = '';
@@ -47,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link href="styles.css" rel="stylesheet"> <!-- External CSS -->
 </head>
 <body class="bg-light text-dark d-flex flex-column min-vh-100">
+    <?php include 'header.php'; ?>
     <div class="container mt-5 flex-grow-1">
         <h1 class="text-custom">Register</h1>
         <?php if ($error): ?>

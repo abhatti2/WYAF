@@ -1,7 +1,6 @@
 <?php
 session_start();
 include 'config.php';
-include 'header.php';
 
 // Check if the user is logged in and has an admin role
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
@@ -29,6 +28,7 @@ try {
     <link href="styles.css" rel="stylesheet"> <!-- External CSS -->
 </head>
 <body class="bg-light text-dark">
+    <?php include 'header.php'; ?>
     <div class="container mt-4">
         <h1 class="text-center mb-4 text-custom">Manage Users</h1>
         <?php if (count($users) > 0): ?>

@@ -1,6 +1,5 @@
 <?php
 session_start();
-include 'header.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -28,6 +27,7 @@ $totalCategories = 8; // Example: $pdo->query("SELECT COUNT(*) FROM categories")
     <link href="styles.css" rel="stylesheet"> <!-- External CSS -->
 </head>
 <body class="bg-light text-dark d-flex flex-column min-vh-100">
+    <?php include 'header.php'; ?>
     <div class="container mt-5 flex-grow-1">
         <div class="row">
             <div class="col-md-8">

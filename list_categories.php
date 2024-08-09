@@ -1,17 +1,6 @@
 <?php
 session_start();
-include 'header.php';
 include 'config.php';
-
-// Check if user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit;
-}
-
-// Fetch categories from the database
-$stmt = $pdo->query("SELECT * FROM categories");
-$categories = $stmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -23,6 +12,19 @@ $categories = $stmt->fetchAll();
     <link href="styles.css" rel="stylesheet"> <!-- External CSS -->
 </head>
 <body class="bg-light text-dark">
+    <?php 
+    include 'header.php';
+    
+    // Check if user is logged in
+    if (!isset($_SESSION['user_id'])) {
+        header("Location: login.php");
+        exit;
+    }
+
+    // Fetch categories from the database
+    $stmt = $pdo->query("SELECT * FROM categories");
+    $categories = $stmt->fetchAll();
+    ?>
     <div class="container mt-5">
         <div class="row mb-3">
             <div class="col-md-8">

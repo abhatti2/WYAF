@@ -2,17 +2,6 @@
 // Start the session and include the database configuration file
 session_start();
 include 'config.php';
-include 'header.php';
-
-// Check if the user is an admin
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
-    header("Location: login.php");
-    exit;
-}
-
-// Fetch all pages that are not approved
-$stmt = $pdo->query("SELECT pages.id, pages.title, users.name as author FROM pages JOIN users ON pages.user_id = users.id WHERE pages.approved = FALSE");
-$pages = $stmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -24,6 +13,17 @@ $pages = $stmt->fetchAll();
     <link href="styles.css" rel="stylesheet"> <!-- External CSS -->
 </head>
 <body class="bg-light text-dark">
+    <?php include 'header.php'; 
+    // Check if the user is an admin
+    if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
+        header("Location: login.php");
+        exit;
+    }
+
+    // Fetch all pages that are not approved
+    $stmt = $pdo->query("SELECT pages.id, pages.title, users.name as author FROM pages JOIN users ON pages.user_id = users.id WHERE pages.approved = FALSE");
+    $pages = $stmt->fetchAll();
+    ?>
     <div class="container mt-5">
         <h1 class="text-custom mb-4">Approve Pages</h1>
         <?php if (count($pages) > 0): ?>

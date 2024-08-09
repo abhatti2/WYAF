@@ -121,3 +121,22 @@ footer {
     flex: 1;
 }
 
+/* Profile Settings */
+.profile-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+/* admin page */
+th {
+    cursor: pointer;
+}
+th.sort-asc::after {
+    content: " ↑";
+}
+th.sort-desc::after {
+    content: " ↓";
+}

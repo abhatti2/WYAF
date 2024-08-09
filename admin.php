@@ -2,40 +2,6 @@
 // Start the session and include the database configuration file
 session_start();
 include 'config.php';
-
-if ($_SESSION['role'] == 'admin') {
-    echo '<a href="manage_users.php" class="btn btn-custom mb-4">Manage Users</a>';
-}
-
-// Check if the user is logged in and has an admin role
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
-    header("Location: login.php");
-    exit;
-}
-
-// Determine the sorting method
-$sort_by = isset($_GET['sort_by']) ? $_GET['sort_by'] : 'title';
-$valid_sort_columns = ['title', 'created_at', 'updated_at'];
-
-if (!in_array($sort_by, $valid_sort_columns)) {
-    $sort_by = 'title';
-}
-
-// Fetch all pages from the database sorted by the chosen column
-$stmt = $pdo->prepare("SELECT * FROM pages ORDER BY $sort_by");
-$stmt->execute();
-$pages = $stmt->fetchAll();
-
-// Handle page approval
-if (isset($_GET['approve_id'])) {
-    $approve_id = filter_input(INPUT_GET, 'approve_id', FILTER_VALIDATE_INT);
-    if ($approve_id) {
-        $stmt = $pdo->prepare("UPDATE pages SET approved = TRUE WHERE id = ?");
-        $stmt->execute([$approve_id]);
-        header("Location: admin.php");
-        exit;
-    }
-}
 ?>
 
 <!DOCTYPE html>
@@ -45,20 +11,45 @@ if (isset($_GET['approve_id'])) {
     <title>Admin Page</title>
     <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap CSS -->
     <link href="styles.css" rel="stylesheet"> <!-- External CSS -->
-    <style>
-        th {
-            cursor: pointer;
-        }
-        th.sort-asc::after {
-            content: " ↑";
-        }
-        th.sort-desc::after {
-            content: " ↓";
-        }
-    </style>
 </head>
 <body class="bg-light text-dark">
-    <?php include 'header.php'; ?> <!-- Include the header -->
+    <?php 
+    include 'header.php'; 
+        
+    if ($_SESSION['role'] == 'admin') {
+        echo '<a href="manage_users.php" class="btn btn-custom mb-4">Manage Users</a>';
+    }
+
+    // Check if the user is logged in and has an admin role
+    if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
+        header("Location: login.php");
+        exit;
+    }
+
+    // Determine the sorting method
+    $sort_by = isset($_GET['sort_by']) ? $_GET['sort_by'] : 'title';
+    $valid_sort_columns = ['title', 'created_at', 'updated_at'];
+
+    if (!in_array($sort_by, $valid_sort_columns)) {
+        $sort_by = 'title';
+    }
+
+    // Fetch all pages from the database sorted by the chosen column
+    $stmt = $pdo->prepare("SELECT * FROM pages ORDER BY $sort_by");
+    $stmt->execute();
+    $pages = $stmt->fetchAll();
+
+    // Handle page approval
+    if (isset($_GET['approve_id'])) {
+        $approve_id = filter_input(INPUT_GET, 'approve_id', FILTER_VALIDATE_INT);
+        if ($approve_id) {
+            $stmt = $pdo->prepare("UPDATE pages SET approved = TRUE WHERE id = ?");
+            $stmt->execute([$approve_id]);
+            header("Location: admin.php");
+            exit;
+        }
+    }
+    ?>
     <div class="container mt-4">
         <h1 class="text-center mb-4 text-custom">Admin Page</h1>
         <div class="d-flex justify-content-end mb-3">

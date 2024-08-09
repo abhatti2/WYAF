@@ -1,7 +1,6 @@
 <?php
 session_start();
 include 'config.php';
-include 'header.php'; // Include the header file
 
 // Enable error reporting for debugging
 ini_set('display_errors', 1);
@@ -69,6 +68,7 @@ if ($page_id) {
     <link href="styles.css" rel="stylesheet"> <!-- External CSS -->
 </head>
 <body class="bg-light text-dark">
+    <?php include 'header.php'; ?>
     <div class="container mt-4">
         <h1 class="text-center mb-4 text-custom"><?php echo htmlspecialchars($page['title']); ?></h1>
         <p><?php echo nl2br(htmlspecialchars($page['content'])); ?></p>

@@ -2,7 +2,6 @@
 // Start the session and include the database configuration file
 session_start();
 include 'config.php';
-include 'header.php'; // Include header for consistent styling
 
 // Enable error reporting for debugging
 ini_set('display_errors', 1);
@@ -149,6 +148,7 @@ $categories = $stmt->fetchAll();
     <link href="styles.css" rel="stylesheet"> <!-- External CSS -->
 </head>
 <body class="bg-light text-dark">
+    <?php include 'header.php' ?>
     <div class="container mt-5">
         <h1 class="text-custom mb-4">Create New Page</h1>
 

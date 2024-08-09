@@ -2,7 +2,7 @@
 // Start the session and include the database configuration file
 session_start();
 include 'config.php';
-include 'header.php'; // Include the header file
+// include 'header.php'; 
 
 // Enable error reporting for debugging
 ini_set('display_errors', 1);
@@ -178,6 +178,7 @@ $categories = $stmt->fetchAll();
     <link href="styles.css" rel="stylesheet"> <!-- External CSS -->
 </head>
 <body class="bg-light text-dark">
+<?php include 'header.php'; ?> 
     <div class="container mt-4">
         <h1 class="text-center mb-4 text-custom">Edit Page</h1>
         <form method="POST" action="edit_page.php?id=<?php echo $page_id; ?>" enctype="multipart/form-data" class="needs-validation" novalidate>

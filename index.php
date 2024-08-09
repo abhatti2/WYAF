@@ -1,6 +1,5 @@
 <?php
 session_start();
-include 'header.php';
 ?>
 
 <!DOCTYPE html>
@@ -13,6 +12,7 @@ include 'header.php';
 </head>
 <body class="bg-light text-dark">
     <!-- Navigation -->
+    <?php include 'header.php'; ?>
 
 
     <!-- Hero Section -->
@@ -93,5 +93,6 @@ include 'header.php';
     <script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
     <script src="node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
     <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+
 </body>
 </html>

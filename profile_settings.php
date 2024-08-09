@@ -1,47 +1,6 @@
 <?php
 session_start();
 include 'config.php';
-include 'header.php';
-
-// Check if the user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit;
-}
-
-// Fetch the user's current information from the database
-$user_id = $_SESSION['user_id'];
-$stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
-$stmt->execute([$user_id]);
-$user = $stmt->fetch();
-
-// Handle form submission
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
-    $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-    $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
-    
-    if ($name && $email) {
-        // Update the user's information in the database
-        $stmt = $pdo->prepare("UPDATE users SET name = ?, email = ? WHERE id = ?");
-        $stmt->execute([$name, $email, $user_id]);
-        
-        // Update password if provided
-        if ($password) {
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-            $stmt = $pdo->prepare("UPDATE users SET password = ? WHERE id = ?");
-            $stmt->execute([$hashed_password, $user_id]);
-        }
-        
-        // Update session information
-        $_SESSION['name'] = $name;
-        
-        header("Location: welcome.php?message=Profile updated successfully");
-        exit;
-    } else {
-        $error = "Please provide valid name and email.";
-    }
-}
 ?>
 
 <!DOCTYPE html>
@@ -51,17 +10,51 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <title>Profile Settings</title>
     <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap CSS -->
     <link href="styles.css" rel="stylesheet"> <!-- External CSS -->
-    <style>
-        .profile-container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-    </style>
 </head>
 <body class="bg-light text-dark">
+    <?php
+    include 'header.php';
+
+    // Check if the user is logged in
+    if (!isset($_SESSION['user_id'])) {
+        header("Location: login.php");
+        exit;
+    }
+
+    // Fetch the user's current information from the database
+    $user_id = $_SESSION['user_id'];
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
+    $stmt->execute([$user_id]);
+    $user = $stmt->fetch();
+
+    // Handle form submission
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
+        
+        if ($name && $email) {
+            // Update the user's information in the database
+            $stmt = $pdo->prepare("UPDATE users SET name = ?, email = ? WHERE id = ?");
+            $stmt->execute([$name, $email, $user_id]);
+            
+            // Update password if provided
+            if ($password) {
+                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+                $stmt = $pdo->prepare("UPDATE users SET password = ? WHERE id = ?");
+                $stmt->execute([$hashed_password, $user_id]);
+            }
+            
+            // Update session information
+            $_SESSION['name'] = $name;
+            
+            header("Location: welcome.php?message=Profile updated successfully");
+            exit;
+        } else {
+            $error = "Please provide valid name and email.";
+        }
+    }
+    ?>
     <div class="container mt-5 profile-container">
         <h1 class="text-custom mb-4">Profile Settings</h1>
         

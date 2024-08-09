@@ -2,7 +2,6 @@
 // Start the session and include the database configuration file
 session_start();
 include 'config.php';
-include 'header.php'; // Include header for consistent styling
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -25,6 +24,7 @@ $pages = $stmt->fetchAll();
     <link href="styles.css" rel="stylesheet"> <!-- External CSS -->
 </head>
 <body class="bg-light text-dark d-flex flex-column min-vh-100">
+    <?php include 'header.php'; ?>
     <div class="container mt-4 flex-grow-1">
         <h1 class="text-custom">List of Pages</h1>
         <div class="d-flex justify-content-end mb-3">

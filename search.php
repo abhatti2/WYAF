@@ -1,7 +1,6 @@
 <?php
 session_start();
 include 'config.php';
-include 'header.php';
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -57,6 +56,7 @@ if (isset($_GET['keyword']) && !empty(trim($_GET['keyword']))) {
     <link href="styles.css" rel="stylesheet"> <!-- External CSS -->
 </head>
 <body class="bg-light text-dark">
+    <?php include 'header.php'; ?>
     <div class="container mt-5">
         <h1 class="text-custom">Search Results</h1>
         <?php if ($error): ?>

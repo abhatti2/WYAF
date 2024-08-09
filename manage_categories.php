@@ -1,18 +1,6 @@
 <?php
 session_start();
-include 'header.php';
-include 'config.php';
-
-// Check if user is logged in and has admin role
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
-    header("Location: login.php");
-    exit;
-}
-
-// Fetch categories from the database using a prepared statement for consistency
-$stmt = $pdo->prepare("SELECT * FROM categories");
-$stmt->execute();
-$categories = $stmt->fetchAll();
+include 'config.php'; 
 ?>
 
 <!DOCTYPE html>
@@ -24,6 +12,20 @@ $categories = $stmt->fetchAll();
     <link href="styles.css" rel="stylesheet"> <!-- External CSS -->
 </head>
 <body class="bg-light text-dark">
+    <?php
+    include 'header.php';
+
+    // Check if user is logged in and has admin role
+    if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
+        header("Location: login.php");
+        exit;
+    }
+
+    // Fetch categories from the database using a prepared statement for consistency
+    $stmt = $pdo->prepare("SELECT * FROM categories");
+    $stmt->execute();
+    $categories = $stmt->fetchAll();
+    ?>
     <div class="container mt-5">
         <div class="row mb-3">
             <div class="col-md-8">
