@@ -10,9 +10,10 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Validate and get the category ID
-$category_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-if ($category_id <= 0) {
-    echo "Invalid category ID.";
+$category_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+
+if ($category_id === false || $category_id <= 0) {
+    header("Location: manage_categories.php?error=invalid_id");
     exit;
 }
 
@@ -22,7 +23,7 @@ $stmt->execute([$category_id]);
 $category = $stmt->fetch();
 
 if (!$category) {
-    echo "Category not found.";
+    header("Location: manage_categories.php?error=category_not_found");
     exit;
 }
 
@@ -50,7 +51,7 @@ $pages = $stmt->fetchAll();
         <ul class="list-group">
             <?php foreach ($pages as $page): ?>
             <li class="list-group-item">
-                <a href="view_page.php?id=<?php echo $page['id']; ?>"><?php echo htmlspecialchars($page['title']); ?></a>
+                <a href="view_page.php?id=<?php echo htmlspecialchars($page['id']); ?>"><?php echo htmlspecialchars($page['title']); ?></a>
             </li>
             <?php endforeach; ?>
         </ul>

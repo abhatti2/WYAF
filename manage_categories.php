@@ -9,8 +9,9 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
     exit;
 }
 
-// Fetch categories from the database
-$stmt = $pdo->query("SELECT * FROM categories");
+// Fetch categories from the database using a prepared statement for consistency
+$stmt = $pdo->prepare("SELECT * FROM categories");
+$stmt->execute();
 $categories = $stmt->fetchAll();
 ?>
 
@@ -48,9 +49,9 @@ $categories = $stmt->fetchAll();
                         <td><?php echo htmlspecialchars($category['name']); ?></td>
                         <td><?php echo htmlspecialchars($category['description']); ?></td>
                         <td>
-                            <a href="view_category.php?id=<?php echo $category['id']; ?>" class="btn btn-info btn-sm">View</a>
-                            <a href="edit_category.php?id=<?php echo $category['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                            <a href="delete_category.php?id=<?php echo $category['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this category?');">Delete</a>
+                            <a href="view_category.php?id=<?php echo htmlspecialchars($category['id']); ?>" class="btn btn-info btn-sm">View</a>
+                            <a href="edit_category.php?id=<?php echo htmlspecialchars($category['id']); ?>" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="delete_category.php?id=<?php echo htmlspecialchars($category['id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this category?');">Delete</a>
                         </td>
                     </tr>
                     <?php endforeach; ?>

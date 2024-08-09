@@ -1,24 +1,32 @@
 <?php
 include 'config.php';
+include 'header.php';
 
 $error = '';
 $success = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Sanitize inputs
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
     $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
     $confirm_password = filter_input(INPUT_POST, 'confirm_password', FILTER_SANITIZE_STRING);
 
-    if ($password !== $confirm_password) {
+    // Validate email
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = 'Invalid email format. Please enter a valid email address.';
+    } elseif ($password !== $confirm_password) {
         $error = 'Passwords do not match. Please try again.';
     } else {
+        // Hash the password
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+        // Prepare the SQL statement
         $stmt = $pdo->prepare("INSERT INTO users (email, name, password, role, created_at, updated_at) VALUES (?, ?, ?, 'user', NOW(), NOW())");
         
         try {
             $stmt->execute([$email, $username, $hashed_password]);
-            $success = 'Registration successful. You can now <a href="login.php">login</a>.';
+            $success = 'Registration successful!';
         } catch (PDOException $e) {
             if ($e->getCode() == 23000) {
                 $error = 'Email or username already exists. Please try again.';
@@ -43,12 +51,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <h1 class="text-custom">Register</h1>
         <?php if ($error): ?>
             <div class="alert alert-danger" role="alert">
-                <?php echo $error; ?>
+                <?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?>
             </div>
         <?php endif; ?>
         <?php if ($success): ?>
             <div class="alert alert-success" role="alert">
-                <?php echo $success; ?>
+                <?php echo htmlspecialchars($success, ENT_QUOTES, 'UTF-8'); ?>
             </div>
         <?php endif; ?>
         <form action="register.php" method="post" class="mt-4">

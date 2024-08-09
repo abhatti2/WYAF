@@ -10,8 +10,14 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
 }
 
 // Fetch all users from the database
-$stmt = $pdo->query("SELECT * FROM users");
-$users = $stmt->fetchAll();
+try {
+    $stmt = $pdo->query("SELECT * FROM users");
+    $users = $stmt->fetchAll();
+} catch (PDOException $e) {
+    // Handle database errors gracefully
+    echo "Error fetching users: " . htmlspecialchars($e->getMessage());
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -25,6 +31,7 @@ $users = $stmt->fetchAll();
 <body class="bg-light text-dark">
     <div class="container mt-4">
         <h1 class="text-center mb-4 text-custom">Manage Users</h1>
+        <?php if (count($users) > 0): ?>
         <table class="table table-bordered table-hover">
             <thead class="thead-dark">
                 <tr>
@@ -43,13 +50,16 @@ $users = $stmt->fetchAll();
                     <td><?php echo htmlspecialchars($user['email']); ?></td>
                     <td><?php echo htmlspecialchars($user['role']); ?></td>
                     <td>
-                        <a href="edit_user.php?id=<?php echo $user['id']; ?>" class="btn btn-sm btn-warning">Edit</a>
-                        <a href="delete_user.php?id=<?php echo $user['id']; ?>" onclick="return confirm('Are you sure you want to delete this user?');" class="btn btn-sm btn-danger">Delete</a>
+                        <a href="edit_user.php?id=<?php echo htmlspecialchars($user['id']); ?>" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="delete_user.php?id=<?php echo htmlspecialchars($user['id']); ?>" onclick="return confirm('Are you sure you want to delete this user?');" class="btn btn-sm btn-danger">Delete</a>
                     </td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
+        <?php else: ?>
+        <p class="text-center">No users found.</p>
+        <?php endif; ?>
     </div>
 
     <?php include 'footer.php'; ?>
