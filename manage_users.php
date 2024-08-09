@@ -31,6 +31,9 @@ try {
     <?php include 'header.php'; ?>
     <div class="container mt-4">
         <h1 class="text-center mb-4 text-custom">Manage Users</h1>
+        <div class="d-flex justify-content-end mb-3">
+            <a href="create_user.php" class="btn btn-success">Create New User</a>
+        </div>
         <?php if (count($users) > 0): ?>
         <table class="table table-bordered table-hover">
             <thead class="thead-dark">
